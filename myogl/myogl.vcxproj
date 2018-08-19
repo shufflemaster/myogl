@@ -151,7 +151,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="controls.hpp" />
-    <ClInclude Include="EngineObject.h" />
     <ClInclude Include="MatrixTests.h" />
     <ClInclude Include="objloader.hpp" />
     <ClInclude Include="quaternion_utils.hpp" />
@@ -161,13 +160,10 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="text2D.hpp" />
     <ClInclude Include="texture.hpp" />
-    <ClInclude Include="Transform.h" />
-    <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="vboindexer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="controls.cpp" />
-    <ClCompile Include="EngineObject.cpp" />
     <ClCompile Include="MatrixTests.cpp" />
     <ClCompile Include="myogl.cpp" />
     <ClCompile Include="objloader.cpp" />
@@ -182,8 +178,6 @@
     <ClCompile Include="tangentspace.cpp" />
     <ClCompile Include="text2D.cpp" />
     <ClCompile Include="texture.cpp" />
-    <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="vboindexer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

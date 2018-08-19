@@ -96,16 +96,21 @@ void computeMatricesFromInputs(){
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 	ProjectionMatrix = glm::perspective(glm::radians(FoV), 4.0f / 3.0f, 0.1f, 100.0f);
 	// Camera matrix
+#if 1
 	ViewMatrix       = glm::lookAt(
 								position,           // Camera is here
 								position+direction, // and looks here : at the same position, plus "direction"
 								up                  // Head is up (set to 0,-1,0 to look upside-down)
 						   );
+#else
+	Mat44CreateLookAt(ViewMatrix, position, position+direction);
+	ViewMatrix = glm::inverse(ViewMatrix);
+#endif
 
 	static bool once = true;
 	if (once) {
 		once = false;
-		DumpMat44("ViewMatrix", ViewMatrix);
+		DumpMat44("OGLViewMatrix", ViewMatrix);
 	}
 
 	// For the next frame, the "last time" will be "now"

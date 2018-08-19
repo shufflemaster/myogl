@@ -30,17 +30,17 @@ static void __cdecl odprintf(const char *format, ...)
 	OutputDebugStringA(buf);
 }
 
-void Mat44CreateLookAt(glm::mat4& mat44, const glm::vec3& from, const glm::vec3& to)
+void CreateLookAtForObject(glm::mat4& mat44, const glm::vec3& from, const glm::vec3& to)
 {
 	glm::vec3 forward = to - from;
 	forward = glm::normalize(forward);
 
 	glm::vec3 up(0.f, 1.f, 0.f);
 	
-	glm::vec3 right = glm::cross(forward, up);
+	glm::vec3 right = glm::cross(up, forward);
 	right = glm::normalize(right);
 
-	up = glm::cross(right, forward);
+	up = glm::cross(forward, right);
 	up = glm::normalize(up);
 
 	//Set the first Column
@@ -65,6 +65,49 @@ void Mat44CreateLookAt(glm::mat4& mat44, const glm::vec3& from, const glm::vec3&
 	mat44[3][3] = 1.f;
 }
 
+void CreateLookAtForCamera(glm::mat4& mat44, const glm::vec3& from, const glm::vec3& to, bool dumpIntermediate)
+{
+	glm::vec3 forward = from - to;
+	forward = glm::normalize(forward);
+
+	glm::vec3 up(0.f, 1.f, 0.f);
+
+	glm::vec3 right = glm::cross(up, forward);
+	right = glm::normalize(right);
+
+	up = glm::cross(forward, right);
+	up = glm::normalize(up);
+
+	//Set the first Column
+	mat44[0][0] = right.x;
+	mat44[0][1] = right.y;
+	mat44[0][2] = right.z;
+	mat44[0][3] = 0.f;
+	//Set the second Column
+	mat44[1][0] = up.x;
+	mat44[1][1] = up.y;
+	mat44[1][2] = up.z;
+	mat44[1][3] = 0.f;
+	//Set the third column
+	mat44[2][0] = forward.x;
+	mat44[2][1] = forward.y;
+	mat44[2][2] = forward.z;
+	mat44[2][3] = 0.f;
+	//Set the fourth column
+	mat44[3][0] = from.x;
+	mat44[3][1] = from.y;
+	mat44[3][2] = from.z;
+	mat44[3][3] = 1.f;
+
+	if (dumpIntermediate)
+	{
+		DumpMat44("CamLookAt44 Before Inversion", mat44);
+	}
+
+	//Need to invert!
+	mat44 = glm::inverse(mat44);
+}
+
 
 void DumpMat44(const char * name, const glm::mat4& mat44)
 {
@@ -80,11 +123,7 @@ void DoMat44Tests()
 	glm::mat4 mat44;
 	glm::vec3 from(0.f, 0.f, 10.f);
 	glm::vec3 to(0.f, 0.f, 0.f);
-	Mat44CreateLookAt(mat44, from, to);
-	DumpMat44("BasicLookAt44", mat44);
-
-	glm::mat4 mat44inversed;
-	mat44inversed = glm::inverse(mat44);
-	DumpMat44("LookAt44Inversed", mat44inversed);
+	CreateLookAtForCamera(mat44, from, to, true);
+	DumpMat44("CamLookAt44", mat44);
 
 }
