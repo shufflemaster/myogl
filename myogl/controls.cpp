@@ -10,6 +10,8 @@ using namespace glm;
 
 #include "controls.hpp"
 
+#include "MatrixTests.h"
+
 glm::mat4 ViewMatrix;
 glm::mat4 ProjectionMatrix;
 
@@ -22,7 +24,7 @@ glm::mat4 getProjectionMatrix(){
 
 
 // Initial position : on +Z
-glm::vec3 position = glm::vec3( 0, 0, 5 ); 
+glm::vec3 position = glm::vec3( 0, 0, 10 ); 
 // Initial horizontal angle : toward -Z
 float horizontalAngle = 3.14f;
 // Initial vertical angle : none
@@ -45,15 +47,15 @@ void computeMatricesFromInputs(){
 	float deltaTime = float(currentTime - lastTime);
 
 	// Get mouse position
-	double xpos, ypos;
+	double xpos=0, ypos=0;
 	glfwGetCursorPos(window, &xpos, &ypos);
 
 	// Reset mouse position for next frame
 	glfwSetCursorPos(window, 1024/2, 768/2);
 
 	// Compute new orientation
-	horizontalAngle += mouseSpeed * float(1024/2 - xpos );
-	verticalAngle   += mouseSpeed * float( 768/2 - ypos );
+	horizontalAngle += 0;//mouseSpeed * float(1024/2 - xpos );
+	verticalAngle += 0;//mouseSpeed * float( 768/2 - ypos );
 
 	// Direction : Spherical coordinates to Cartesian coordinates conversion
 	glm::vec3 direction(
@@ -99,6 +101,12 @@ void computeMatricesFromInputs(){
 								position+direction, // and looks here : at the same position, plus "direction"
 								up                  // Head is up (set to 0,-1,0 to look upside-down)
 						   );
+
+	static bool once = true;
+	if (once) {
+		once = false;
+		DumpMat44("ViewMatrix", ViewMatrix);
+	}
 
 	// For the next frame, the "last time" will be "now"
 	lastTime = currentTime;
